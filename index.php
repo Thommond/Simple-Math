@@ -103,9 +103,86 @@
     </section>
 
 
-    <section class='result'>
+    <section class='results'>
+
+      <?php
+
+      if(isset($_POST['submit'])) {
+
+        $operation = $_POST['operation'];
+        $guess = $_POST['guess'];
+        $num_1 = $_POST['num_1'];
+        $num_2 = $_POST['num_2'];
+        $answer = 0;
+        $check = False;
+        $correct = 0;
+        $attempts = 0;
+
+        switch ($operation) {
+          case 'addition':
+            $answer = $num_1 + $num_2;
+            break;
+          case 'subtraction':
+            $answer = $num_1 - $num_2;
+            break;
+          case 'division':
+            $answer = $num_1 / $num_2;
+            break;
+          case 'multiplication':
+            $answer = $num_1 * $num_2;
+            break;
+        }
+
+        if ($guess == strval($answer)) {
+          $check = True;
+          $correct += 1;
+        }
+        else $check = False;
+
+        $attempts += 1;
+
+        session_start();
+
+        $_SESSION['num_1'] = $num_1;
+        $_SESSION['num_2'] = $num_2;
+        $_SESSION['operation'] = $operation;
+        $_SESSION['guess'] = $guess;
+        $_SESSION['correct'] = $check;
+        $_SESSION['attempts'] += $attempts;
+        $_SESSION['correct_overall'] += $correct;
+
+        $db_link = mysqli_connect("localhost", "root", "", "number");
+
+        if ($db_link == false) {
+          die("ERROR: Could not connect." . mysqli_connect_error());
+        }
+
+        $sql = "INSERT INTO attempts (first_num, second_num, op, guess, correct) VALUES ('$num_1', '$num_2', '$operation', '$guess', '$correct')";
+
+        if (mysqli_query($db_link, $sql)) echo "<p>Added attempt to database.</p>";
+        else echo "ERROR: Could not execute $sql." . mysqli_error($db_link);
+
+        mysqli_close($db_link);
+
+      }
+
+      ?>
+
+      <label for="correct">Corrects:
+
+      <p><?php if(isset($_POST['submit'])) echo $_SESSION['correct_overall']; ?></p>
+
+      </label>
+
+      <label for="attempts"> Attempts:
+
+        <p><?php if(isset($_POST['submit'])) echo $_SESSION['attempts']; ?></p>
+
+      </label>
 
     </section>
+
+  </section>
 
   </body>
 </html>
