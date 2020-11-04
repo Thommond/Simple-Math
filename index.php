@@ -62,10 +62,46 @@
 
       <section>
 
+        <form class="" action="index.php" method="post" id='answer'>
 
-    <section>
+          <label for="num_1"> First Number
+
+            <p>
+              <input type="text" name="num_1" value=<?php if (isset($_POST['press'])) echo $num_1; ?>>
+            </p>
+
+          </label>
+
+          <label for="num_2"> Second Number
+
+            <p>
+              <input type="text" name="num_2" value=<?php if (isset($_POST['press'])) echo $num_2; ?>>
+            </p>
+
+          </label>
+          <p>
+            <select class="" name="operation" form='answer'>
+              <option value="addition">+</option>
+              <option value="subtraction">-</option>
+              <option value="division">/</option>
+              <option value="multiplication">*</option>
+            </select>
+         </p>
+
+          <label for="answer"> Guess
+
+            <p>
+              <input type="text" name="guess" >
+            </p>
+
+          </label>
+
+          <input type="submit" name="submit" value="Submit">
+
+        </form>
 
     </section>
+
 
     <section class='result'>
 
